@@ -4,25 +4,26 @@
 
 
 class Login:
-    def __init__(self, login, haslo):
+    def __init__(self, login, haslo, uprawnienia):
         self.login = login
         self.haslo = haslo
+        self.uprawnienia = uprawnienia
 
 
-class Funkcja_pracownicza:
+class FunkcjaPracownicza:
     def __init__(self, stanowisko, max_wynagordzenie, min_wynagrodzenie):
         self.stanowisko = stanowisko
         self.max_wynagrodzenie = max_wynagordzenie
         self.min_wynagrodzenie = min_wynagrodzenie
 
 
-class Funkcja_stacji:
+class FunkcjaStacji:
     def __init__(self, funkcja):
         self.funkcja = funkcja
 
 
-class Stacja_meteorologiczna:
-    def __init__(self, nazwa_stacji, wysokosc_npm, wojewodztwo, powiat, gmina, funkcja_stacji_id_funk_stacji)
+class StacjaMeteorologiczna:
+    def __init__(self, nazwa_stacji, wysokosc_npm, wojewodztwo, powiat, gmina, funkcja_stacji_id_funk_stacji):
         self.nazwa_stacji = nazwa_stacji
         self.wysokosc_npm = wysokosc_npm
         self.wojewodztwo = wojewodztwo
@@ -49,4 +50,44 @@ class Czujniki:
         self.rok_produkcji = rok_produkcji
         self.pomiar = pomiar
         self.cena = cena
+
+class StacjaMaCzujniki:
+    def __init__(self, stacja_meteorologiczna_kod_stacji, czujniki_id_czujnika):
+        self.stacja_meteorologiczna_kod_stacji = stacja_meteorologiczna_kod_stacji
+        self.czujniki_id_czujnika = czujniki_id_czujnika
+
+
+class Temperatura:
+    def __init__(self, ):
+        self.czas_pomiaru = czas_pomiaru
+        self.termometr = termometr
+        self.kod_stacji_t_st = kod_stacji_t_st
+
+
+class Cisnienie:
+    def __init__(self):
+        self.czas_pomiaru = czas_pomiaru
+        self.cisnienie_p_m = cisnienie_p_m
+        self.kod_stacji_c_st = kod_stacji_c_st
+
+
+class Aktynometria:
+    def __init__(self):
+        self.czas_pomiaru = czas_pomiaru
+        self.prom_calkowite = prom_calkowite
+        self.prom_rozproszone = prom_rozproszone
+        self.prom_bezposrednie = prom_bezposrednie
+        self.kod_stacji_a_st = kod_stacji_a_st
+
+
+
+
+
+
+
+
+
+
+
+
 
