@@ -12,7 +12,12 @@ CREATE TABLE IF NOT EXISTS logowanie (
   haslo VARCHAR(45) NOT NULL,
   PRIMARY KEY (id_loginu))
 ;
-  
+alter table logowanie add column uprawnienia varchar(10) not null;
+alter table logowanie modify column uprawnienia varchar(30) not null;
+select * from logowanie;
+
+select * from logowanie;
+
 -- -----------------------------------------------------
 -- Table funkcja_pacownicza		2
 -- -----------------------------------------------------
@@ -25,6 +30,8 @@ CREATE TABLE if not exists funkcja_pacownicza (
   PRIMARY KEY (id_funk_prac)
   )
 ;
+select * from funkcja_pacownicza;
+select id_funk_prac from funkcja_pacownicza where stanowisko='specjalista';
 
 -- -----------------------------------------------------
 -- Table funkcja_stacji		3
@@ -37,6 +44,8 @@ CREATE TABLE IF NOT EXISTS funkcja_stacji (
   UNIQUE INDEX funkcja_UNIQUE (funkcja ASC))
 ;
 
+select * from funkcja_stacji;
+delete from funkcja_stacji;
 
 -- -----------------------------------------------------
 -- Table stacja_meteorologiczna		4
@@ -54,8 +63,8 @@ CREATE TABLE IF NOT EXISTS stacja_meteorologiczna (
   FOREIGN KEY (funkcja_stacji_id_funk_stacji)
   REFERENCES funkcja_stacji (id_funk_stacji));
   
-  
-  
+  select * from imgw_manager.stacja_meteorologiczna;
+  delete from stacja_meteorologiczna;
 -- -----------------------------------------------------
 -- Table pracownik		5
 -- -----------------------------------------------------
@@ -64,8 +73,6 @@ CREATE TABLE IF NOT EXISTS stacja_meteorologiczna (
   id_pracownik INT NOT NULL AUTO_INCREMENT,
   imie VARCHAR(45) NOT NULL,
   nazwisko VARCHAR(45) NOT NULL,
-  data_urodzenia DATE NULL,
-  nfz_rejon VARCHAR(45) NULL,
   pensja decimal(9,2) NULL,
   id_loginu_l INT NOT NULL,
   kod_stacji_p INT NOT NULL,
@@ -80,6 +87,19 @@ CREATE TABLE IF NOT EXISTS stacja_meteorologiczna (
     FOREIGN KEY (id_funk_prac_p)
     REFERENCES funkcja_pacownicza (id_funk_prac))
 ;
+insert into pracownik values(default, 'Michal', 'Krzeminski', 3000, 1, 60, 6 );
+select * from pracownik;
+delete from pracownik;
+
+select imie, nazwisko 
+from logowanie l
+join pracownik p
+on l.id_loginu = p.id_loginu_l
+where l.login = 'kvothe' and l.haslo = 'dexter';
+
+
+
+
 
 -- -----------------------------------------------------
 -- Table czujniki	6
@@ -158,14 +178,23 @@ CREATE TABLE IF NOT EXISTS aktynometria (
   id_aktyn int primary key not null auto_increment,
   czas_pomiaru DATETIME NOT NULL,
   prom_calkowite DECIMAL(2) NULL,
-  prom_rozproszone DECIMAL(2) NULL,
-  prom_bezposrednie DECIMAL(2) NULL,
+  prom_odbite DECIMAL(2) NULL,
   kod_stacji_a_st INT NOT NULL,
     FOREIGN KEY (kod_stacji_a_st)
     REFERENCES stacja_meteorologiczna (kod_stacji))
 ;
+select * from aktynometria;
+alter table aktynometria
+drop column aktynometria.prom_bezposrednie;
 
+alter table aktynometria
+modify column prom_odbite DECIMAL(3) NULL;
 
+alter table aktynometria
+modify column prom_calkowite DECIMAL(3) NULL;
+
+alter table aktynometria
+change column prom_rozproszone prom_odbite DECIMAL(2) NULL;
 
 
 
