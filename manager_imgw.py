@@ -1,5 +1,4 @@
 from files.imgw_project.imgw import Login, FunkcjaPracownicza, FunkcjaStacji, StacjaMeteorologiczna, Pracownik, Czujniki, Aktynometria
-import files.imgw_project.imgw
 from files.imgw_project.config import host, user, password, db
 import pymysql
 import sys
@@ -47,12 +46,13 @@ class AdministratorManager(PracownikManager):
             "insert into logowanie(login, haslo, uprawnienia) values('%s', '%s',  '%s');" % (
             user.login, user.haslo, user.uprawnienia))
         self.conn.commit()
+        return self.get_id_logowania(user)
 
-    def get_id_logowania(self, user, login, haslo):
+    def get_id_logowania(self, user):
         cursor = self.conn.cursor()
         cursor.execute(
-            "select id_loginu from logowanie where '%s'='%s' & '%s'='%s';" % (
-                user.login, login, user.haslo, haslo))
+            "select id_loginu from logowanie where login='%s' and haslo='%s';" % (
+                user.login, user.haslo,))
         return cursor.fetchall()
 
     def add_funkcja_stacji(self, funkcja_stacji):
@@ -133,8 +133,8 @@ while True:
         imgw_manager.cursor.execute(
             "select p.imie, p.nazwisko, l.uprawnienia from logowanie l join pracownik p on l.id_loginu = p.id_loginu_l where '%s' = 'kvothe' and '%s' = 'dexter';" %
             (login, haslo))
-        powitanie = imgw_manager.cursor.fetchall()
 
+        powitanie = imgw_manager.cursor.fetchall()
 
     except IndexError:
         print("Bledne dane logowania, zle haslo lub login")
@@ -148,24 +148,22 @@ while True:
             imgw_manager = AdministratorManager(host, user, password, db)
 
             print("Jako amdinistrator możesz modyfikować dane w bazie danych. Wybierz działania:")
-            dzialanie = input("Wprowadz nowego pracownika y \n")
+            dzialanie = input("Wprowadz nowego pracownika d \n")
             if dzialanie == 'd':
                 imie = input("Podaj imie: ")
                 nazwisko = input("Podaj nazwisko: ")
-                pensja = int(input("Podaj wynagrodzenie brutto"))
-                login = input("Podaj login")
-                haslo = input("Podaj haslo")
-                uprawnienia = input("Podaj uprawnienia")
-                nazwa_stacji = input("Podaj nazwe stacji")
-                stanowisko = input("Podaj stanowisko")
+                pensja = int(input("Podaj wynagrodzenie brutto: "))
+                login_u = input("Podaj login: ")
+                haslo_u = input("Podaj haslo: ")
+                uprawnienia = input("Podaj uprawnienia: ")
+                nazwa_stacji = input("Podaj nazwe stacji: ")
+                stanowisko = input("Podaj stanowisko: ")
 
-                user = Login(login, haslo, uprawnienia)
-                imgw_manager.add_user_to_logowanie(user)
-
+                user = Login(login_u, haslo_u, uprawnienia)
                 pracownik = Pracownik(imie, nazwisko, pensja,
-                                      imgw_manager.get_id_logowania(user, login, haslo),
-                                      imgw_manager.get_id_stacji_meteo(nazwa_stacji),
-                                      imgw_manager.get_id_funk_prac(stanowisko))
+                                      imgw_manager.add_user_to_logowanie(user)[0][0],
+                                      imgw_manager.get_id_stacji_meteo(nazwa_stacji)[0][0],
+                                      imgw_manager.get_id_funk_prac(stanowisko)[0][0])
                 imgw_manager.add_pracownik(pracownik)
             break
         else:
