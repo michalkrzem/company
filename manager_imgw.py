@@ -1,6 +1,10 @@
 from files.imgw_project.imgw import Login, FunkcjaPracownicza, FunkcjaStacji, StacjaMeteorologiczna, Pracownik, Czujniki, Aktynometria
 from files.imgw_project.config import host, user, password, db
 import pymysql
+from files.imgw_project.analyse import dane_pomiarowe
+from files.imgw_project.sns_plot import ploty
+import matplotlib.pyplot as plt
+
 import sys
 
 
@@ -165,9 +169,30 @@ while True:
                                       imgw_manager.get_id_stacji_meteo(nazwa_stacji)[0][0],
                                       imgw_manager.get_id_funk_prac(stanowisko)[0][0])
                 imgw_manager.add_pracownik(pracownik)
-            break
-        else:
-            print("cos nie tak")
+            else:
+                #df = dane_pomiarowe()
+                ploty()
+
+
+
+
+
+
+
+
+
+
+
+    break
+
+
+
+
+
+
+
+
+
 
 
 #################################################################################################
